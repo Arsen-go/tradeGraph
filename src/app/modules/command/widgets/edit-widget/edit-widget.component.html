@@ -1,0 +1,17 @@
+<div *ngIf="commandContext$ | async as commandContext">
+  <nz-modal
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)='handleOk()'
+    [nzMaskClosable]='false'
+    [nzOkLoading]='isBusy'
+    [nzVisible]='isVisible$ | async'
+    nzCancelText="Отмена"
+    nzOkText="Изменить"
+    nzTitle="Изменить заявку"
+  >
+    <ng-container *nzModalContent>
+      <ats-command-header [instrument]="commandContext.instrument"></ats-command-header>
+      <ats-limit-edit *ngIf='commandContext.commandParameters.type === "limit"' [commandContext]="commandContext"></ats-limit-edit>
+    </ng-container>
+  </nz-modal>
+</div>

@@ -1,0 +1,25 @@
+@import (reference) '/src/styles.less';
+
+.inner-content {
+  height: 95vh
+}
+
+:host ::ng-deep {
+  .scrollable-content();
+}
+
+gridster ::ng-deep {
+  background-color: @layout-body-background;
+  color: @text-color-secondary
+}
+
+gridster-item ::ng-deep {
+  background-color: @component-background;
+  color: @text-color;
+
+  .gridster-item-resizable-handler.handle-e {
+    width: 5px;
+  }
+}
+
+

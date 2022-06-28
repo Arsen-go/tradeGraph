@@ -1,0 +1,37 @@
+<div>
+  <nz-tabset>
+    <nz-tab nzTitle="Настройки">
+      <div>
+        <form (ngSubmit)="saveSettings()" [formGroup]="settingsForm" [nzLayout]="'horizontal'" nz-form>
+          <nz-form-item>
+            <nz-form-control *ngIf="collection$ | async as collection" nzErrorTip="Выберите отображаемый список">
+              <nz-form-label nzFor="activeListId" nzRequired>Список инструментов</nz-form-label>
+              <nz-select formControlName='activeListId'>
+                <nz-option *ngFor="let list of collection.collection" [nzValue]="list.id" [nzLabel]="list.title"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="compact">
+            <nz-form-control nzErrorTip="Выберите колонки">
+              <nz-form-label nzRequired nzFor="instrumentColumns">Колонки инструментов</nz-form-label>
+              <nz-select [nzMaxTagCount]="10" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                         nzPlaceHolder="Выберите..." formControlName="instrumentColumns">
+                <nz-option *ngFor="let item of allInstrumentColumns" [nzLabel]="item.name" [nzValue]="item.columnId"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control>
+              <button type='submit' nz-button nzType="primary" [disabled]="!settingsForm.valid">Сохранить</button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="Списки инструментов">
+      <ats-watchlist-collection-edit></ats-watchlist-collection-edit>
+    </nz-tab>
+  </nz-tabset>
+</div>
+
+<ng-template #tagPlaceHolder let-selectedList>and {{ selectedList.length }} more selected</ng-template>

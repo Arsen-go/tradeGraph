@@ -1,0 +1,16 @@
+<div class="finance-chart">
+  <canvas baseChart
+    *ngIf="yearChartData?.labels?.length ?? -1 > 0"
+    [data]="yearChartData"
+    [options]="yearChartOptions"
+    [type]="barChartType">
+  </canvas>
+</div>
+<div class="finance-chart">
+  <canvas baseChart
+    *ngIf="quorterChartData?.labels?.length ?? -1 > 0"
+    [data]="quorterChartData"
+    [options]="quorterChartOptions"
+    [type]="barChartType">
+  </canvas>
+</div>

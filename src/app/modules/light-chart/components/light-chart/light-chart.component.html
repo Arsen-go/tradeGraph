@@ -1,0 +1,13 @@
+<div *ngIf="activeTimeFrame$ | async as tf" class="timeframes">
+  <ng-container *ngFor="let timeframe of availableTimeFrames">
+    <button
+      (click)="changeTimeframe(timeframe.value)"
+      [nzType]="tf === timeframe.value ? 'primary': 'default'"
+      nz-button>
+      {{timeframe.label}}
+    </button>
+  </ng-container>
+</div>
+<div (mousedown)="$event.stopPropagation()" [hidden]='shouldShowSettings' class="main-chart">
+  <div [id]="guid"></div>
+</div>

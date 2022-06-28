@@ -1,0 +1,41 @@
+.icon-display {
+  transform: scale(0.7)
+}
+
+.panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.title {
+  &:not(:first-child) {
+    padding-left: 5px;
+  }
+
+  &:not(:last-child) {
+    padding-right: 5px;
+  }
+}
+
+button {
+  line-height: normal;
+  height: auto;
+  border: none;
+  // value should be greater then value of .gridster-item-resizable-handler (2)
+  z-index: 10;
+
+  &:first-child {
+    margin-left: -5px;
+  }
+
+  &:last-child {
+    margin-right: -5px;
+  }
+}
+
+.link-to-active-btn {
+  i.active {
+    color: lightgreen;
+  }
+}

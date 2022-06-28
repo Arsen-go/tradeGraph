@@ -1,0 +1,59 @@
+<ng-template #empty>
+  <nz-empty
+    nzNotFoundImage="simple"
+    [nzNotFoundContent]='isFilterDisabled() ? "Позиций нет" : "С такими фильтрами ничего не найдено"'>
+  </nz-empty>
+</ng-template>
+
+<nz-table *ngIf="displayPositions$ | async as positions" #nzTable [nzData]="positions"
+    #nzTableComponent
+    [nzNoResult]="empty"
+    nzTableLayout="fixed"
+    nzSize="small"
+    [nzFrontPagination]="false"
+    [nzShowPagination]="false"
+    [nzScroll]="{ x: tableInnerWidth }">
+  <thead>
+    <tr>
+      <th *ngFor='let column of listOfColumns'
+          [nzCustomFilter]='column.hasSearch ? "": null'
+          [nzSortFn]='column.sortFn'
+          [nzFilters]="column.listOfFilter"
+          [nzShowFilter]="column.hasFilter"
+          [nzFilterFn]="column.filterFn">
+        {{column.name}}
+        <nz-filter-trigger *ngIf='column.hasSearch' [(nzVisible)]="column.isSearchVisible" [nzActive]="!!searchFilter" [nzDropdownMenu]="searchMenu">
+          <i [ngClass]="isFilterApplied(column) ? 'active-filter' : 'not-active-filter'" nz-icon nzType="search"></i>
+        </nz-filter-trigger>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ord of nzTable.data" (click)="selectInstrument(ord.symbol, ord.exchange)">
+      <td class='bold' *ngIf='shouldShow("symbol")'>
+        {{ ord.symbol }}
+      </td>
+      <td *ngIf='shouldShow("shortName")'>{{ ord.shortName }}</td>
+      <td *ngIf='shouldShow("avgPrice")'>{{ roundPrice(ord.avgPrice) }}</td>
+      <td *ngIf='shouldShow("qtyT0")' [class]='ord.qtyT0 < 0 ? "sell" : "buy"'>{{ round(ord.qtyT0) }}</td>
+      <td *ngIf='shouldShow("qtyT1")' [class]='ord.qtyT1 < 0 ? "sell" : "buy"'>{{ round(ord.qtyT1) }}</td>
+      <td *ngIf='shouldShow("qtyT2")' [class]='ord.qtyT2 < 0 ? "sell" : "buy"'>{{ round(ord.qtyT2) }}</td>
+      <td *ngIf='shouldShow("qtyTFuture")' [class]='ord.qtyTFuture < 0 ? "sell" : "buy"'>{{ round(ord.qtyTFuture) }}</td>
+      <td *ngIf='shouldShow("volume")'>{{ ord.volume }}</td>
+      <td *ngIf='shouldShow("unrealisedPl")' [class]='ord.unrealisedPl < 0 ? "sell" : "buy"'>{{ round(ord.unrealisedPl) }}</td>
+      <td *ngIf='shouldShow("dailyUnrealisedPl")' [class]='ord.dailyUnrealisedPl < 0 ? "sell" : "buy"'>{{ round(ord.dailyUnrealisedPl) }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown" *ngFor='let column of listOfColumns'>
+    <div class="search-box" *ngIf='column.hasSearch && column.isSearchVisible'>
+      <input
+        class='ant-input' type="text" nz-input [placeholder]="column.searchDescription"
+        [ngModel]='getFilter(column.id)'
+        (ngModelChange)="filterChange($event, column.id)"/>
+    </div>
+  </div>
+  <button nz-button nzType="primary" nzSize="small" (click)="reset()">Сбросить</button>
+</nz-dropdown-menu>
